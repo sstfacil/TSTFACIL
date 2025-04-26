@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const token = localStorage.getItem('token');
   const nomeUsuario = document.getElementById('nomeUsuario');
+  const adminArea = document.getElementById('adminArea');
 
   if (!token) {
     nomeUsuario.textContent = "Acesso negado. Faça login.";
@@ -15,6 +16,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (response.ok) {
       nomeUsuario.textContent = "Olá, técnico!";
+
+      // Se o email decodificado for admin@sstfacil.com, mostra a área de admin
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      if (payload.email === 'admin@sstfacil.com') {
+        adminArea.style.display = 'block';
+      }
     } else {
       nomeUsuario.textContent = "Sessão expirada.";
       setTimeout(() => window.location.href = 'login.html', 1500);
